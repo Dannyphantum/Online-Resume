@@ -68,9 +68,21 @@ public class ResumeServlet extends HttpServlet {
 		}
 		request.setAttribute("UserSkill", SkillsList);
 		
-		DBConnection connect = new DBConnection();
+		//DBConnection connect = new DBConnection();
 		
-		connect.addRecord("userinfo", "username", "email", username, email);
+		//connect.addRecord("userinfo", "username", "email", username, email);
+		
+		try {
+			Connection con = null;
+			PreparedStatement statement = null;
+			con = DriverManager.getConnection("jdbc:mysql://localhost/roboresume?user=root&password=password");
+			String sql = String.format("insert into %s (%s,%s) values (?,?)", "userinfo", "username", "email", username, email);
+			statement = con.prepareStatement(sql);
+			statement.setString(1, username);
+			statement.setString(2, email);
+			System.out.println(sql);
+			statement.executeUpdate();
+		} catch (SQLException e) {e.printStackTrace();}
 		
 		
 		getServletContext().getRequestDispatcher("/output.jsp").forward(request, response);
