@@ -4,14 +4,14 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>Your Resume</title>
 </head>
 <body>
 <h1>Working!!!</h1>
-<h2>${username}</h2>
-<h2>${email}</h2>
-<h2>${education}</h2>
-<h2>${workExperience}</h2>
-<h2>${skill}</h2>
+<h2>${UserName}</h2>
+<h2>${UserEmail}</h2>
+<h2>${Education}</h2>
+<h2>${work}</h2>
+<h2>${UserSkill}</h2>
 </body>
 </html>
