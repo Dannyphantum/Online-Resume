@@ -1,11 +1,18 @@
 
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 /**
  * Servlet implementation class ResumeServlet
@@ -34,16 +41,55 @@ public class ResumeServlet extends HttpServlet {
 		String email = request.getParameter("email");
 		request.setAttribute("UserEmail", email);
 		
-		String education = request.getParameter("education");
-		request.setAttribute("Education", education);
+		ArrayList<String> schoolin = new ArrayList<>();
 		
-		String workExperience = request.getParameter("workExperience");
-		request.setAttribute("Work", workExperience);
+		for(int i=1; i < 11; i++){
+			String edu = "education" + i;
+			String education = request.getParameter(edu);
+			if(!education.equals("")) schoolin.add(education);
+		}
+		request.setAttribute("Education",schoolin);
 		
-		String skill = request.getParameter("skill");
-		request.setAttribute("UserSkill", skill);
+		ArrayList<String> workin = new ArrayList<>();
+		
+		for(int i =1; i < 11; i++){
+			String work = "workExperience" + i;
+			String workExperience = request.getParameter(work);
+			if(!workExperience.equals("")) workin.add(workExperience);
+		}
+		request.setAttribute("Work", workin);
+		
+		ArrayList<String> SkillsList = new ArrayList<>();
+		
+		for (int i = 1; i < 21; i++){
+			String userskills = "skill" + i;
+			String skill = request.getParameter(userskills);
+			if(!skill.equals("")) SkillsList.add(skill);
+		}
+		request.setAttribute("UserSkill", SkillsList);
+		
+		DBConnection connect = new DBConnection();
+		
+		connect.addRecord("userinfo", "username", "email", username, email);
+		
 		
 		getServletContext().getRequestDispatcher("/output.jsp").forward(request, response);
+		
 	}
-
+	
+/*
+	public void addRecord(String table, String column1, String column2, String username, String email) {
+		try {
+			Connection con = null;
+			PreparedStatement statement = null;
+			con = DriverManager.getConnection("jdbc:mysql://localhost/robo_resume?user=root&password=password");
+			String sql = String.format("insert into %s (%s,%s) values (?,?)", userinfo, column1, column2, username, email);
+			statement = con.prepareStatement(sql);
+			statement.setString(1, username);
+			statement.setString(2, email);
+			System.out.println(sql);
+			statement.executeUpdate();
+		} catch (SQLException e) {e.printStackTrace();}
+	}
+	*/
 }
