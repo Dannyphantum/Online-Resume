@@ -75,14 +75,18 @@ public class ResumeServlet extends HttpServlet {
 		try {
 			Connection con = null;
 			PreparedStatement statement = null;
+			Class.forName("com.mysql.jdbc.Driver");
 			con = DriverManager.getConnection("jdbc:mysql://localhost/roboresume?user=root&password=password");
-			String sql = String.format("insert into %s (%s,%s) values (?,?)", "userinfo", "username", "email", username, email);
+			String sql = String.format("insert into %s (%s,%s, %s) values (?,?)", "userinfo", "username", "email", "skills.skill", username, email, SkillsList);
 			statement = con.prepareStatement(sql);
 			statement.setString(1, username);
 			statement.setString(2, email);
 			System.out.println(sql);
 			statement.executeUpdate();
-		} catch (SQLException e) {e.printStackTrace();}
+		} catch (SQLException e) {e.printStackTrace();} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		
 		getServletContext().getRequestDispatcher("/output.jsp").forward(request, response);
